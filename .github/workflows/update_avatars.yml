@@ -43,9 +43,3 @@ jobs:
           git add "*.png"
           git diff --staged --quiet || git commit -m "Update contributor avatar gallery files."
           git push
-        # uses: EndBug/add-and-commit@v7
-        # with:
-        #   author_name: Taichi Gardener
-        #   author_email: taichigardener@gmail.com
-        #   message: 'Update contributor avatar gallery files.'
-        #   add: '*.png'
