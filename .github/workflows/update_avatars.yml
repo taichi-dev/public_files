@@ -40,9 +40,15 @@ jobs:
           cd -
 
       - name: Commit changes
-        uses: EndBug/add-and-commit@v7
-        with:
-          author_name: Taichi Gardener
-          author_email: taichigardener@gmail.com
-          message: 'Update contributor avatar gallery files.'
-          add: '*.png'
+        run: |
+          git config user.name "Taichi Gardener"
+          git config user.email "taichigardener@gmail.com"
+          git add "*.png"
+          git diff --staged --quiet || git commit -m "Update contributor avatar gallery files."
+          git push
+        # uses: EndBug/add-and-commit@v7
+        # with:
+        #   author_name: Taichi Gardener
+        #   author_email: taichigardener@gmail.com
+        #   message: 'Update contributor avatar gallery files.'
+        #   add: '*.png'
