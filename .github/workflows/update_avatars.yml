@@ -1,0 +1,45 @@
+name: Update Avatars Gallery for Taichi Repos
+
+on:
+  schedule:
+    # update it every day
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  update-avatars:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.8"
+          architecture: "x64"
+
+      - name: Install Dependencies
+        run: |
+          pip install github-avatars-gallery-generator
+          pip install cairosvg
+
+      - name: Generate SVG files
+        run: |
+          cd taichi.graphics/
+          gh-gallery -o taichi-dev -r taichi-docs-zh-cn -a 48 -n 12
+          cairosvg contributors_taichi-dev_taichi-docs-zh-cn_12.svg -o contributors_taichi-dev_taichi-docs-zh-cn_12.png --scale 3
+          cd -
+
+          cd taichi/
+          gh-gallery -o taichi-dev -r taichi -a 48 -n 12
+          cairosvg contributors_taichi-dev_taichi_12.svg -o contributors_taichi-dev_taichi_12.png --scale 3
+          cd -
+
+      - name: Commit changes
+        run: |
+          git config user.name "Taichi Gardener"
+          git config user.email "taichigardener@gmail.com"
+          git add "*.png"
+          git diff --staged --quiet || git commit -m "Update contributor avatar gallery files."
+          git push
