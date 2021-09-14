@@ -27,12 +27,12 @@ jobs:
       - name: Generate SVG files
         run: |
           cd taichi.graphics/
-          gh-gallery -o taichi-dev -r taichi-docs-zh-cn -a 48 -n 12
+          gh-gallery -o taichi-dev -r taichi-docs-zh-cn -a 48 -n 12 --shuffle
           cairosvg contributors_taichi-dev_taichi-docs-zh-cn_12.svg -o contributors_taichi-dev_taichi-docs-zh-cn_12.png --scale 3
           cd -
 
           cd taichi/
-          gh-gallery -o taichi-dev -r taichi -a 48 -n 12
+          gh-gallery -o taichi-dev -r taichi -a 48 -n 12 --shuffle
           cairosvg contributors_taichi-dev_taichi_12.svg -o contributors_taichi-dev_taichi_12.png --scale 3
           cd -
 
