@@ -14,26 +14,35 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Setup Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: "3.8"
           architecture: "x64"
+          cache: 'pip'
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'gradle'
 
       - name: Install Dependencies
         run: |
           pip install github-avatars-gallery-generator
-          pip install cairosvg
+          wget https://github.com/sterlp/svg2png/releases/download/v1.1.0/svg2png-1.1.0.jar
 
-      - name: Generate SVG files
+
+      - name: Generate SVG files and convert them to PNG
         run: |
           cd taichi.graphics/
           gh-gallery -o taichi-dev -r taichi-docs-zh-cn -a 48 -n 12 --shuffle
-          cairosvg contributors_taichi-dev_taichi-docs-zh-cn_12.svg -o contributors_taichi-dev_taichi-docs-zh-cn_12.png --scale 3
+          java -jar ../svg2png-1.1.0.jar -e -f contributors_taichi-dev_taichi-docs-zh-cn_12.svg -n contributors_taichi-dev_taichi-docs-zh-cn_12.png -h 640
           cd -
 
           cd taichi/
-          gh-gallery -o taichi-dev -r taichi -a 48 -n 12 --shuffle
-          cairosvg contributors_taichi-dev_taichi_12.svg -o contributors_taichi-dev_taichi_12.png --scale 3
+          gh-gallery -o taichi-dev -r taichi -a 32 -n 18 --shuffle
+          java -jar ../svg2png-1.1.0.jar -e -f contributors_taichi-dev_taichi_18.svg -n contributors_taichi-dev_taichi_18.png -h 1080
           cd -
 
       - name: Commit changes
